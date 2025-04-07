@@ -28,7 +28,7 @@ class DashboardFragment : Fragment() {
 
         val itemList = listOf(
             Item(R.drawable.luk, "Лук", 40, true),
-            Item(R.drawable.luk, "Помидор", 24),
+            Item(R.drawable.defaultpomidor, "Помидор", 24,false,"Кирюхин помидор", R.drawable.detailpomidor),
             Item(R.drawable.luk, "Огурец", 15, true),
             Item(R.drawable.luk, "Базилик", 22),
             Item(R.drawable.luk, "Картофель", 77),
@@ -37,20 +37,36 @@ class DashboardFragment : Fragment() {
             Item(R.drawable.luk, "Горох", 81)
         )
 
-        // Начально отображаем все элементы
         var filteredItemList: List<Item> = itemList
 
-        val adapter = ItemAdapter(filteredItemList) // Передаем отфильтрованный список
+        val adapter = ItemAdapter(filteredItemList) { item ->
+            val detailFragment = DetailFragment.newInstance(
+                item.title,
+                item.calories,
+                item.imageResId,
+                item.detailedDescription,
+                item.detailedImageResId
+            )
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)  // Добавляем в бэкстек для возврата
+                .commit()
+
+            recyclerView.visibility = View.GONE
+            binding.btnAll.visibility = View.GONE
+            binding.btnFavorites.visibility = View.GONE
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         binding.btnAll.setOnClickListener {
-            filteredItemList = itemList // Показываем все элементы
+            filteredItemList = itemList
             adapter.updateItems(filteredItemList)
         }
 
         binding.btnFavorites.setOnClickListener {
-            filteredItemList = itemList.filter { it.favorite } // Показываем только избранные
+            filteredItemList = itemList.filter { it.favorite }
             adapter.updateItems(filteredItemList)
         }
 

@@ -10,7 +10,9 @@ import com.example.myapplication.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.ui.dashboard.Item
 
-class ItemAdapter(private var itemList: List<Item>) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(private var itemList: List<Item>,
+                  private val onItemClick: (Item) -> Unit
+) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.imageView)
@@ -36,7 +38,9 @@ class ItemAdapter(private var itemList: List<Item>) : RecyclerView.Adapter<ItemA
             if (item.favorite) R.drawable.ic_home_black_24dp
             else R.drawable.baseline_bungalow_24
         )
-
+        holder.itemView.setOnClickListener {
+            onItemClick(item)  // Передаем выбранный элемент
+        }
         // Обработчик клика по звезде
         holder.btnFavorite.setOnClickListener {
             item.favorite = !item.favorite

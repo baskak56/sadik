@@ -55,7 +55,6 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Звёздочка -->
     </FrameLayout>
 
 </androidx.cardview.widget.CardView>
