@@ -18,7 +18,12 @@
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" >
 
+        <action
+            android:id="@+id/action_dashboard_to_detail"
+            app:destination="@id/detailFragment" />
+
     </fragment>
+
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -32,6 +37,12 @@
         android:name="com.example.myapplication.ui.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.myapplication.ui.dashboard.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail" />
 
 
 </navigation>
