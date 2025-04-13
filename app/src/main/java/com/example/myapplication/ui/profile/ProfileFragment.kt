@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.profile
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -16,7 +17,10 @@ import com.example.myapplication.databinding.FragmentProfileBinding
 import  android.graphics.drawable.GradientDrawable
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.ViewOutlineProvider
 import android.view.inputmethod.EditorInfo
+import android.widget.GridLayout
+import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 
 class ProfileFragment : Fragment() {
@@ -35,11 +39,15 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         sharedPreferences =
             requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        binding.avatarImageView.setOnClickListener {
+            showAvatarPicker()
+        }
 
 
         setupViews()
         loadSavedData()
         setupTextWatchers()
+        loadSavedAvatar()
 
         return binding.root
     }
@@ -49,6 +57,9 @@ class ProfileFragment : Fragment() {
         // Настройка кнопки меню
         binding.btnMenu.setOnClickListener { view ->
             showPopupMenu(view)
+        }
+        binding.avatarImageView.setOnClickListener {
+            showAvatarPicker()
         }
 
         // Сохранение данных при изменении текста
@@ -128,6 +139,19 @@ class ProfileFragment : Fragment() {
             } else {
                 binding.nameInputLayout.error = null
             }
+
+            binding.nameInputLayout.hint = if (text.isNullOrBlank()) {
+                "Введите имя"
+            } else {
+                "Имя указано"
+            }
+
+            binding.nameInputLayout.boxBackgroundMode =
+                if (text.isNullOrBlank()) {
+                    com.google.android.material.textfield.TextInputLayout.BOX_BACKGROUND_OUTLINE
+                } else {
+                    com.google.android.material.textfield.TextInputLayout.BOX_BACKGROUND_NONE
+                }
         }
 
         binding.surnameEditText.doAfterTextChanged { text ->
@@ -136,7 +160,21 @@ class ProfileFragment : Fragment() {
             } else {
                 binding.surnameInputLayout.error = null
             }
+
+            binding.surnameInputLayout.hint = if (text.isNullOrBlank()) {
+                "Введите фамилию"
+            } else {
+                "Фамилия указана"
+            }
+
+            binding.surnameInputLayout.boxBackgroundMode =
+                if (text.isNullOrBlank()) {
+                    com.google.android.material.textfield.TextInputLayout.BOX_BACKGROUND_OUTLINE
+                } else {
+                    com.google.android.material.textfield.TextInputLayout.BOX_BACKGROUND_NONE
+                }
         }
+
         binding.surnameEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 saveUserData()
@@ -145,6 +183,7 @@ class ProfileFragment : Fragment() {
                 false
             }
         }
+
         binding.nameEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
                 binding.surnameEditText.requestFocus()
@@ -152,10 +191,59 @@ class ProfileFragment : Fragment() {
             } else {
                 false
             }
-        }   
+        }
     }
+
+    private fun showAvatarPicker() {
+        val avatars = listOf(
+            R.drawable.image11,
+            R.drawable.image12,
+            R.drawable.image18,
+            R.drawable.image19,
+            R.drawable.image20,
+            R.drawable.image3,
+        )
+
+        val dialogView = layoutInflater.inflate(R.layout.avatar_picker_dialog, null)
+        val grid = dialogView.findViewById<GridLayout>(R.id.avatarGrid)
+        grid.columnCount = 1
+
+        avatars.forEach { avatarRes ->
+            val imageView = ImageView(requireContext()).apply {
+                setImageResource(avatarRes)
+                layoutParams = ViewGroup.MarginLayoutParams(200, 200).apply {
+                    setMargins(16, 16, 16, 16)
+                }
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                background = ContextCompat.getDrawable(requireContext(), R.drawable.circle)
+                clipToOutline = true
+                outlineProvider = ViewOutlineProvider.BACKGROUND
+                setOnClickListener {
+                    binding.avatarImageView.setImageResource(avatarRes)
+                    sharedPreferences.edit().putInt("avatar_res", avatarRes).apply()
+                    alertDialog?.dismiss()
+                }
+            }
+            grid.addView(imageView)
+        }
+
+        alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Выберите аватарку")
+            .setView(dialogView)
+            .create()
+
+        alertDialog?.show()
+    }
+
+    private var alertDialog: AlertDialog? = null
+
+
     override fun onPause() {
         super.onPause()
         saveUserData()
+    }
+    private fun loadSavedAvatar() {
+        val avatarRes = sharedPreferences.getInt("avatar_res", R.drawable.luk)
+        binding.avatarImageView.setImageResource(avatarRes)
     }
 }
