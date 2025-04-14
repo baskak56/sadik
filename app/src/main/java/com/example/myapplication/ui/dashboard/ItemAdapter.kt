@@ -19,6 +19,7 @@ class ItemAdapter(private var itemList: List<Item>,
         val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
         val textViewCalories: TextView = view.findViewById(R.id.textViewCalories)
         val btnFavorite: ImageButton = view.findViewById(R.id.btnFavorite)
+        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,6 +39,7 @@ class ItemAdapter(private var itemList: List<Item>,
             if (item.favorite) R.drawable.ic_home_black_24dp
             else R.drawable.baseline_bungalow_24
         )
+
         holder.itemView.setOnClickListener {
             onItemClick(item)  // Передаем выбранный элемент
         }
@@ -46,11 +48,13 @@ class ItemAdapter(private var itemList: List<Item>,
             item.favorite = !item.favorite
             notifyItemChanged(position)
         }
+        holder.deleteButton.visibility = View.GONE
     }
     fun updateItems(newList: List<Item>) {
         itemList = newList
         notifyDataSetChanged()
     }
+
 
     override fun getItemCount() = itemList.size
 }
