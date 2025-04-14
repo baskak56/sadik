@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
-import com.example.gardenapp.ItemAdapter
 import com.example.gardenapp.MyPlantAdapter
 import com.example.myapplication.DateActivity
 import com.example.myapplication.data.GardenStorage
@@ -24,6 +23,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: MyPlantAdapter
+    private val decorators = mutableMapOf<Item, TaskDecorator>() // Храним декораторы для каждого растения
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,24 +33,32 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // Инициализация адаптера с mutableList
-        adapter = MyPlantAdapter(GardenStorage.plantedItems.toMutableList()) { item ->
-            Toast.makeText(requireContext(), "Вы выбрали ${item.title}", Toast.LENGTH_SHORT).show()
-        }
+        adapter = MyPlantAdapter(
+            GardenStorage.plantedItems.toMutableList(),
+            onItemClick = { item ->
+                Toast.makeText(requireContext(), "Вы выбрали ${item.title}", Toast.LENGTH_SHORT).show()
+            },
+            removeDecorator = { item -> // Callback для удаления декоратора
+                decorators[item]?.let {
+                    binding.calendarView.removeDecorator(it)
+                    decorators.remove(item)
+                }
+            }
+        )
 
-        // Настройка RecyclerView
         binding.gardenRecyclerView.adapter = adapter
         binding.gardenRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // Даты задач
-        val taskDates = hashSetOf(
-            CalendarDay.today(),
-            CalendarDay.from(2025, 3, 10),
-            CalendarDay.from(2025, 3, 13)
-        )
+        // Инициализация декораторов для уже существующих растений
+        GardenStorage.plantedItems.forEach { item ->
+            item.taskDates?.let { dates ->
+                val decorator = TaskDecorator(HashSet(dates))
+                binding.calendarView.addDecorator(decorator)
+                decorators[item] = decorator
+            }
+        }
 
-        // Кнопка добавления нового растения
         binding.btnAddPlant.setOnClickListener {
             val plantNames = listOf("Морковь", "Огурец", "Картофель", "Помидор")
 
@@ -60,16 +68,21 @@ class HomeFragment : Fragment() {
             builder.setItems(plantNames.toTypedArray()) { _, which ->
                 val selectedPlantName = plantNames[which]
                 val selectedPlant = when (selectedPlantName) {
-                    "Морковь" -> Item(R.drawable.luk, "Морковь", 41)
-                    "Огурец" -> Item(R.drawable.defaultpomidor, "Огурец", 15)
-                    "Картофель" -> Item(R.drawable.detailpomidor, "Картофель", 77)
-                    "Помидор" -> Item(R.drawable.luk, "Помидор", 18)
-                    else -> Item(R.drawable.detailpomidor, "Морковь", 41)
+                    "Морковь" -> Item(R.drawable.luk, "Морковь", 41, taskDates = hashSetOf(CalendarDay.today()))
+                    "Огурец" -> Item(R.drawable.defaultpomidor, "Огурец", 15, taskDates = hashSetOf(CalendarDay.from(2025, 3, 15)))
+                    "Картофель" -> Item(R.drawable.detailpomidor, "Картофель", 77, taskDates = hashSetOf(CalendarDay.from(2025, 3, 22)))
+                    "Помидор" -> Item(R.drawable.luk, "Помидор", 18, taskDates = hashSetOf(CalendarDay.from(2025, 4, 1)))
+                    else -> Item(R.drawable.detailpomidor, "Морковь", 41, taskDates = hashSetOf(CalendarDay.today()))
                 }
 
-                // Добавляем и обновляем адаптер
                 GardenStorage.plantedItems.add(selectedPlant)
                 adapter.updateItems(GardenStorage.plantedItems.toMutableList())
+
+                selectedPlant.taskDates?.let { taskDates ->
+                    val decorator = TaskDecorator(HashSet(taskDates))
+                    binding.calendarView.addDecorator(decorator)
+                    decorators[selectedPlant] = decorator // Сохраняем декоратор
+                }
 
                 Toast.makeText(
                     requireContext(),
@@ -82,8 +95,7 @@ class HomeFragment : Fragment() {
             builder.show()
         }
 
-        // Настройка календаря
-        binding.calendarView.addDecorator(TaskDecorator(taskDates))
+        // Обработка выбора даты на календаре
         binding.calendarView.setOnDateChangedListener { _, date, selected ->
             if (selected) {
                 val intent = Intent(requireContext(), DateActivity::class.java)
@@ -97,6 +109,6 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        _binding = null
     }
 }

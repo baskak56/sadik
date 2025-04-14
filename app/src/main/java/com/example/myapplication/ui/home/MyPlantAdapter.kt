@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.ui.dashboard.Item
 import com.example.myapplication.data.GardenStorage
 
-class MyPlantAdapter(private var itemList: MutableList<Item>, // MutableList, чтобы изменять список
-                     private val onItemClick: (Item) -> Unit
+class MyPlantAdapter(
+    private var itemList: MutableList<Item>,
+    private val onItemClick: (Item) -> Unit,
+    private val removeDecorator: (Item) -> Unit // Callback для удаления декоратора
 ) : RecyclerView.Adapter<MyPlantAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,6 +22,7 @@ class MyPlantAdapter(private var itemList: MutableList<Item>, // MutableList, ч
         val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
         val textViewCalories: TextView = view.findViewById(R.id.textViewCalories)
         val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
+        val favoritebtn: ImageButton = view.findViewById(R.id.btnFavorite)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,44 +38,40 @@ class MyPlantAdapter(private var itemList: MutableList<Item>, // MutableList, ч
         holder.textViewCalories.text = "${item.calories} ккал"
 
         holder.itemView.setOnClickListener {
-            onItemClick(item)  // Передаем выбранный элемент
+            onItemClick(item)
         }
 
-        // Обработчик клика по кнопке удаления
         holder.deleteButton.setOnClickListener {
             if (position >= 0 && position < itemList.size) {
-                // Удаляем элемент из списка
                 val removedItem = itemList[position]
 
-                // Удаляем элемент из глобального хранилища
-                GardenStorage.plantedItems.remove(removedItem)
+                // Удаляем декоратор через callback
+                removeDecorator(removedItem)
 
-                // Удаляем элемент из списка адаптера
+                // Удаляем элемент из хранилища и списка
+                GardenStorage.plantedItems.remove(removedItem)
                 itemList.removeAt(position)
 
-                // Обновляем адаптер после удаления элемента
+                // Обновляем адаптер
                 notifyItemRemoved(position)
 
-                // Если после удаления список пуст, обновляем весь адаптер
                 if (itemList.isEmpty()) {
                     notifyDataSetChanged()
                 } else {
-                    // Если удалён не последний элемент, обновляем остальные
                     if (position < itemList.size) {
                         notifyItemRangeChanged(position, itemList.size - position)
                     }
                 }
             }
         }
+
+        holder.favoritebtn.visibility = View.GONE
     }
 
-    // Метод для обновления данных
     fun updateItems(newList: List<Item>) {
-        itemList = newList.toMutableList()  // Преобразуем в MutableList
+        itemList = newList.toMutableList()
         notifyDataSetChanged()
     }
 
     override fun getItemCount() = itemList.size
 }
-
-
