@@ -26,6 +26,15 @@
         app:layout_constraintVertical_bias="0.526"
         android:clipToOutline="true"/>
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="97dp"
+        android:layout_height="40dp"
+        android:src="@drawable/logo"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="-5dp" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -75,24 +84,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button_red"
+        android:clipToOutline="true"
         android:minWidth="120dp"
         android:text="Статус"
-        app:layout_constraintTop_toBottomOf="@id/surnameInputLayout"
         app:layout_constraintStart_toStartOf="@id/surnameInputLayout"
-        android:clipToOutline="true"
-        android:background="@drawable/rounded_button_green"/>
+        app:layout_constraintTop_toBottomOf="@id/surnameInputLayout" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="97dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="280dp"
-        android:layout_marginBottom="20dp"
-        android:foregroundGravity="center"
-        android:gravity="center"
-        android:text="Садоводы"
-        app:layout_constraintBottom_toTopOf="@+id/avatarImageView"
-        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
