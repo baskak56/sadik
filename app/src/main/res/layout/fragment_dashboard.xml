@@ -36,6 +36,7 @@
             android:id="@+id/btnAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_red"
             android:text="Все" />
 
         <com.google.android.material.button.MaterialButton
@@ -43,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:background="@drawable/rounded_button_red"
             android:text="Избранные" />
     </LinearLayout>
 
