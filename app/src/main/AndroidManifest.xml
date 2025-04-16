@@ -27,6 +27,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".DateActivity"
+            android:exported="true"
+             />
         <!-- Декларация активности DateActivity -->
         <activity
             android:name=".DateActivity"

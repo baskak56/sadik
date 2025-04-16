@@ -3,7 +3,9 @@ package com.example.myapplication.ui.home
 import TaskDecorator
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +19,14 @@ import com.example.myapplication.DateActivity
 import com.example.myapplication.data.GardenStorage
 import com.example.myapplication.ui.dashboard.Item
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import java.util.*
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: MyPlantAdapter
-    private val decorators = mutableMapOf<Item, TaskDecorator>() // Храним декораторы для каждого растения
+    private val decorators = mutableListOf<TaskDecorator>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,26 +41,14 @@ class HomeFragment : Fragment() {
             onItemClick = { item ->
                 Toast.makeText(requireContext(), "Вы выбрали ${item.title}", Toast.LENGTH_SHORT).show()
             },
-            removeDecorator = { item -> // Callback для удаления декоратора
-                decorators[item]?.let {
-                    binding.calendarView.removeDecorator(it)
-                    decorators.remove(item)
-                }
-            }
+            onUpdateDecorators = { updateCalendarDecorators() }
         )
 
         binding.gardenRecyclerView.adapter = adapter
         binding.gardenRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // Инициализация декораторов для уже существующих растений
-        GardenStorage.plantedItems.forEach { item ->
-            item.taskDates?.let { dates ->
-                val decorator = TaskDecorator(HashSet(dates))
-                binding.calendarView.addDecorator(decorator)
-                decorators[item] = decorator
-            }
-        }
+        updateCalendarDecorators()
 
         binding.btnAddPlant.setOnClickListener {
             val plantNames = listOf("Морковь", "Огурец", "Картофель", "Помидор")
@@ -67,22 +58,31 @@ class HomeFragment : Fragment() {
 
             builder.setItems(plantNames.toTypedArray()) { _, which ->
                 val selectedPlantName = plantNames[which]
-                val selectedPlant = when (selectedPlantName) {
-                    "Морковь" -> Item(R.drawable.luk, "Морковь", 41, taskDates = hashSetOf(CalendarDay.today()))
-                    "Огурец" -> Item(R.drawable.defaultpomidor, "Огурец", 15, taskDates = hashSetOf(CalendarDay.from(2025, 3, 15)))
-                    "Картофель" -> Item(R.drawable.detailpomidor, "Картофель", 77, taskDates = hashSetOf(CalendarDay.from(2025, 3, 22)))
-                    "Помидор" -> Item(R.drawable.luk, "Помидор", 18, taskDates = hashSetOf(CalendarDay.from(2025, 4, 1)))
-                    else -> Item(R.drawable.detailpomidor, "Морковь", 41, taskDates = hashSetOf(CalendarDay.today()))
-                }
+                val selectedPlant: Item
 
+                when (selectedPlantName) {
+                    "Морковь" -> {
+                        val dates = generateTaskMap(CalendarDay.today(), 3, 10, listOf("Полив", "Прополка"))
+                        selectedPlant = Item(R.drawable.luk, "Морковь", 41, taskDates = dates)
+                    }
+                    "Помидор" -> {
+                        val dates = generateTaskMap(CalendarDay.today(), 2, 5, listOf("Удобрение", "Полив"))
+                        selectedPlant = Item(R.drawable.detailpomidor, "Помидор", 42, taskDates = dates)
+                    }
+                    "Картофель" -> {
+                        val dates = generateTaskMap(CalendarDay.today(), 5, 4, listOf("Подгребание", "Полив"))
+                        selectedPlant = Item(R.drawable.luk, "Картофель", 70, taskDates = dates)
+                    }
+                    else -> { // Огурец
+                        val dates = generateTaskMap(CalendarDay.today(), 1, 3, listOf("Полив"))
+                        selectedPlant = Item(R.drawable.luk, "Огурец", 43, taskDates = dates)
+                    }
+
+                }
+                Log.d("TASK_CHECK", "${selectedPlant.title}: ${selectedPlant.taskDates}")
                 GardenStorage.plantedItems.add(selectedPlant)
                 adapter.updateItems(GardenStorage.plantedItems.toMutableList())
-
-                selectedPlant.taskDates?.let { taskDates ->
-                    val decorator = TaskDecorator(HashSet(taskDates))
-                    binding.calendarView.addDecorator(decorator)
-                    decorators[selectedPlant] = decorator // Сохраняем декоратор
-                }
+                updateCalendarDecorators()
 
                 Toast.makeText(
                     requireContext(),
@@ -95,7 +95,6 @@ class HomeFragment : Fragment() {
             builder.show()
         }
 
-        // Обработка выбора даты на календаре
         binding.calendarView.setOnDateChangedListener { _, date, selected ->
             if (selected) {
                 val intent = Intent(requireContext(), DateActivity::class.java)
@@ -107,9 +106,51 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    private fun updateCalendarDecorators() {
+        decorators.forEach { binding.calendarView.removeDecorator(it) }
+        decorators.clear()
+
+        GardenStorage.plantedItems.forEach { item ->
+            val dates = item.taskDates.keys
+            if (dates.isNotEmpty()) {
+                val decorator = TaskDecorator(HashSet(dates), Color.RED)
+                binding.calendarView.addDecorator(decorator)
+                decorators.add(decorator)
+            }
+        }
+    }
+
+    private fun generateTaskMap(
+        startDate: CalendarDay,
+        intervalDays: Int,
+        count: Int,
+        tasks: List<String>
+    ): Map<CalendarDay, List<String>> {
+        val taskMap = mutableMapOf<CalendarDay, List<String>>()
+        val calendar = Calendar.getInstance()
+        calendar.set(startDate.year, startDate.month - 1, startDate.day)
+
+        repeat(count) {
+            val newDate = CalendarDay.from(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            taskMap[newDate] = tasks
+            calendar.add(Calendar.DAY_OF_MONTH, intervalDays)
+        }
+
+        return taskMap
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onResume() {
+        super.onResume()
+        adapter.updateItems(GardenStorage.plantedItems.toMutableList())
+        updateCalendarDecorators()
     }
 }
 

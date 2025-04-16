@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.myapplication.R
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.ui.dashboard.Item
+import com.example.myapplication.R
 import com.example.myapplication.data.GardenStorage
+import com.example.myapplication.ui.dashboard.Item
 
 class MyPlantAdapter(
     private var itemList: MutableList<Item>,
     private val onItemClick: (Item) -> Unit,
-    private val removeDecorator: (Item) -> Unit // Callback для удаления декоратора
+    private val onUpdateDecorators: () -> Unit
 ) : RecyclerView.Adapter<MyPlantAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,25 +43,10 @@ class MyPlantAdapter(
 
         holder.deleteButton.setOnClickListener {
             if (position >= 0 && position < itemList.size) {
-                val removedItem = itemList[position]
-
-                // Удаляем декоратор через callback
-                removeDecorator(removedItem)
-
-                // Удаляем элемент из хранилища и списка
-                GardenStorage.plantedItems.remove(removedItem)
+                GardenStorage.plantedItems.remove(item)
                 itemList.removeAt(position)
-
-                // Обновляем адаптер
                 notifyItemRemoved(position)
-
-                if (itemList.isEmpty()) {
-                    notifyDataSetChanged()
-                } else {
-                    if (position < itemList.size) {
-                        notifyItemRangeChanged(position, itemList.size - position)
-                    }
-                }
+                onUpdateDecorators()
             }
         }
 
@@ -75,3 +60,4 @@ class MyPlantAdapter(
 
     override fun getItemCount() = itemList.size
 }
+
