@@ -62,23 +62,27 @@ class HomeFragment : Fragment() {
 
                 when (selectedPlantName) {
                     "Морковь" -> {
-                        val intervals = mapOf("Полив" to 2, "Прополка" to 3)
-                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
+                        val intervals = mapOf("Полив" to 1, "Прополка" to 3, "Секс" to 5)
+                        val colors = mapOf("Полив" to Color.BLUE, "Прополка" to Color.GREEN, "Секс" to Color.MAGENTA)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
                         selectedPlant = Item(R.drawable.luk, "Морковь", 41, taskDates = dates)
                     }
                     "Помидор" -> {
                         val intervals = mapOf("Удобрение" to 5, "Полив" to 2)
-                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
+                        val colors = mapOf("Удобрение" to Color.YELLOW, "Полив" to Color.CYAN)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
                         selectedPlant = Item(R.drawable.detailpomidor, "Помидор", 42, taskDates = dates)
                     }
                     "Картофель" -> {
                         val intervals = mapOf("Подгребание" to 5, "Полив" to 4)
-                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
+                        val colors = mapOf("Подгребание" to Color.LTGRAY, "Полив" to Color.BLUE)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
                         selectedPlant = Item(R.drawable.luk, "Картофель", 70, taskDates = dates)
                     }
                     else -> {
                         val intervals = mapOf("Полив" to 1)
-                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
+                        val colors = mapOf("Полив" to Color.GREEN)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
                         selectedPlant = Item(R.drawable.luk, "Огурец", 43, taskDates = dates)
                     }
                 }
@@ -114,11 +118,13 @@ class HomeFragment : Fragment() {
         decorators.clear()
 
         GardenStorage.plantedItems.forEach { item ->
-            val allDates = item.taskDates.values.flatten()
-            if (allDates.isNotEmpty()) {
-                val decorator = TaskDecorator(HashSet(allDates), Color.RED)
-                binding.calendarView.addDecorator(decorator)
-                decorators.add(decorator)
+            val allEntries = item.taskDates.entries
+            for ((date, taskList) in allEntries) {
+                for (task in taskList) {
+                    val decorator = TaskDecorator(HashSet(setOf(date)), task.color)
+                    binding.calendarView.addDecorator(decorator)
+                    decorators.add(decorator)
+                }
             }
         }
     }
@@ -126,26 +132,26 @@ class HomeFragment : Fragment() {
     private fun generateTaskMap(
         startDate: CalendarDay,
         intervals: Map<String, Int>,
-        count: Int
-    ): Map<String, List<CalendarDay>> {
-        val taskMap = mutableMapOf<String, List<CalendarDay>>()
+        count: Int,
+        taskColors: Map<String, Int>
+    ): Map<CalendarDay, List<TaskInfo>> {
+        val taskMap = mutableMapOf<CalendarDay, MutableList<TaskInfo>>()
 
         for ((taskName, intervalDays) in intervals) {
             val calendar = Calendar.getInstance()
             calendar.set(startDate.year, startDate.month - 1, startDate.day)
 
-            val dates = mutableListOf<CalendarDay>()
             repeat(count) {
-                dates.add(
-                    CalendarDay.from(
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH) + 1,
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                    )
+                val date = CalendarDay.from(
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH)
                 )
+                val info = TaskInfo(taskName, taskColors[taskName] ?: Color.RED)
+                taskMap.getOrPut(date) { mutableListOf() }.add(info)
+
                 calendar.add(Calendar.DAY_OF_MONTH, intervalDays)
             }
-            taskMap[taskName] = dates
         }
 
         return taskMap
@@ -155,6 +161,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onResume() {
         super.onResume()
         adapter.updateItems(GardenStorage.plantedItems.toMutableList())

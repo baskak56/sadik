@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,8 +19,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
@@ -54,6 +54,26 @@ class DashboardFragment : Fragment() {
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        // Исправленный обработчик для поиска с использованием объекта, реализующего интерфейс
+        val searchListener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Не требуется действие при отправке текста
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Фильтрация элементов на основе введенного текста
+                val query = newText.orEmpty().toLowerCase()
+                filteredItemList = itemList.filter { item ->
+                    item.title.toLowerCase().contains(query)
+                }
+                adapter.updateItems(filteredItemList)
+                return true
+            }
+        }
+
+        binding.searchView.setOnQueryTextListener(searchListener)
 
         binding.btnAll.setOnClickListener {
             filteredItemList = itemList

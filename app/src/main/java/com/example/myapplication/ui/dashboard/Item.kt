@@ -2,6 +2,7 @@ package com.example.myapplication.ui.dashboard
 
 import TaskDecorator
 import com.example.myapplication.R
+import com.example.myapplication.ui.home.TaskInfo
 import com.prolificinteractive.materialcalendarview.CalendarDay
 
 data class Item(
@@ -11,6 +12,6 @@ data class Item(
     var favorite: Boolean = false,
     val detailedDescription: String = "Описание не доступно",  // Дополнительное описание
     val detailedImageResId: Int = R.drawable.luk, // Дополнительное изображение
-    val taskDates: Map<String, List<CalendarDay>> = emptyMap() ,
+    val taskDates: Map<CalendarDay, List<TaskInfo>> = emptyMap(),
     var decorator: TaskDecorator? = null
 )

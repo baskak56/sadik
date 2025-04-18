@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.data.GardenStorage
-import com.example.myapplication.ui.home.HomeFragment
 import com.prolificinteractive.materialcalendarview.CalendarDay
 
 class DateActivity : AppCompatActivity() {
@@ -46,23 +45,25 @@ class DateActivity : AppCompatActivity() {
 
     private fun getPlantTasksForDate(selectedDate: CalendarDay?): List<String> {
         if (selectedDate == null) return emptyList()
+
         val tasks = mutableListOf<String>()
         val plantList = GardenStorage.plantedItems
 
         plantList.forEach { item ->
-            item.taskDates.forEach { (taskName, dates) ->
-                if (selectedDate in dates) {
-                    tasks.add("$taskName (${item.title})")
+            item.taskDates.forEach { (taskDate, taskInfoList) ->
+                if (selectedDate == taskDate) {
+                    taskInfoList.forEach { taskInfo ->
+                        tasks.add("${taskInfo.name} (${item.title})")
+                    }
                 }
             }
         }
 
         return tasks
     }
-    override fun onBackPressed() {
-        // Здесь можно обновить данные, если нужно
-        setResult(RESULT_OK)
-        super.onBackPressed() // Вызов метода родителя
-    }
 
+    override fun onBackPressed() {
+        setResult(RESULT_OK)
+        super.onBackPressed()
+    }
 }
