@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".ui.profile.ProfileFragment"
-    android:background="#FFBCD3">
+    android:background="#FFE2E2">
+
     <ImageView
         android:id="@+id/avatarImageView"
         android:layout_width="100dp"
@@ -15,6 +16,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/circle"
         android:clickable="true"
+        android:clipToOutline="true"
         android:contentDescription="Avatar"
         android:focusable="true"
         android:scaleType="centerCrop"
@@ -23,17 +25,16 @@
         app:layout_constraintEnd_toStartOf="@+id/nameInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.526"
-        android:clipToOutline="true"/>
+        app:layout_constraintVertical_bias="0.855" />
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="97dp"
-        android:layout_height="40dp"
+        android:layout_width="118dp"
+        android:layout_height="59dp"
         android:src="@drawable/logo"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="-5dp" />
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="-4dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameInputLayout"
@@ -84,9 +85,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_button_red"
-        android:clipToOutline="true"
         android:minWidth="120dp"
+        android:background="@drawable/rounded_button_white"
         android:text="Статус"
         app:layout_constraintStart_toStartOf="@id/surnameInputLayout"
         app:layout_constraintTop_toBottomOf="@id/surnameInputLayout" />

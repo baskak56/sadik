@@ -5,12 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment">
+    tools:context=".ui.dashboard.DashboardFragment"
+    android:background="#FFE2E2"
+    >
 
     <!-- Строка поиска -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
+        android:background="@drawable/rounded_button_white"
         android:layout_height="wrap_content"
         android:queryHint="Поиск овощей..."
         app:layout_constraintTop_toTopOf="parent"

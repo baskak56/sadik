@@ -93,8 +93,8 @@ class ProfileFragment : Fragment() {
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menu_item1 -> {
-                        updateButton("Овощ", R.color.red)
-                        viewModel.saveStatus("Овощ")
+                        updateButton("Новичок", R.color.red)
+                        viewModel.saveStatus("Новичок")
                     }
 
                     R.id.menu_item2 -> {

@@ -3,8 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="#FFBCD3"
-    app:cardBackgroundColor="#FFE7EE"
+    android:background="#FFFFFF"
+    app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 
@@ -16,31 +16,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+
             android:padding="8dp">
 
             <ImageButton
                 android:id="@+id/btnFavorite"
-                android:layout_width="62dp"
-                android:layout_height="51dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="end|top"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Избранное"
                 android:padding="8dp"
                 android:src="@drawable/baseline_bungalow_24"
-                app:tint="@android:color/holo_orange_light" />
+                app:tint="#FDADAD" />
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
+                android:layout_width="144dp"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/textViewTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:paddingTop="4dp"
                 android:text="Овощ"
                 android:textSize="16sp"
@@ -54,6 +55,7 @@
                 android:text="Ккал"
                 android:textColor="#888888"
                 android:textSize="14sp" />
+
             <ImageButton
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
