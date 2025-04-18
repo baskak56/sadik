@@ -62,22 +62,25 @@ class HomeFragment : Fragment() {
 
                 when (selectedPlantName) {
                     "Морковь" -> {
-                        val dates = generateTaskMap(CalendarDay.today(), 3, 10, listOf("Полив", "Прополка"))
+                        val intervals = mapOf("Полив" to 2, "Прополка" to 3)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
                         selectedPlant = Item(R.drawable.luk, "Морковь", 41, taskDates = dates)
                     }
                     "Помидор" -> {
-                        val dates = generateTaskMap(CalendarDay.today(), 2, 5, listOf("Удобрение", "Полив"))
+                        val intervals = mapOf("Удобрение" to 5, "Полив" to 2)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
                         selectedPlant = Item(R.drawable.detailpomidor, "Помидор", 42, taskDates = dates)
                     }
                     "Картофель" -> {
-                        val dates = generateTaskMap(CalendarDay.today(), 5, 4, listOf("Подгребание", "Полив"))
+                        val intervals = mapOf("Подгребание" to 5, "Полив" to 4)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
                         selectedPlant = Item(R.drawable.luk, "Картофель", 70, taskDates = dates)
                     }
-                    else -> { // Огурец
-                        val dates = generateTaskMap(CalendarDay.today(), 1, 3, listOf("Полив"))
+                    else -> {
+                        val intervals = mapOf("Полив" to 1)
+                        val dates = generateTaskMap(CalendarDay.today(), intervals, 10)
                         selectedPlant = Item(R.drawable.luk, "Огурец", 43, taskDates = dates)
                     }
-
                 }
                 Log.d("TASK_CHECK", "${selectedPlant.title}: ${selectedPlant.taskDates}")
                 GardenStorage.plantedItems.add(selectedPlant)
@@ -111,9 +114,9 @@ class HomeFragment : Fragment() {
         decorators.clear()
 
         GardenStorage.plantedItems.forEach { item ->
-            val dates = item.taskDates.keys
-            if (dates.isNotEmpty()) {
-                val decorator = TaskDecorator(HashSet(dates), Color.RED)
+            val allDates = item.taskDates.values.flatten()
+            if (allDates.isNotEmpty()) {
+                val decorator = TaskDecorator(HashSet(allDates), Color.RED)
                 binding.calendarView.addDecorator(decorator)
                 decorators.add(decorator)
             }
@@ -122,22 +125,27 @@ class HomeFragment : Fragment() {
 
     private fun generateTaskMap(
         startDate: CalendarDay,
-        intervalDays: Int,
-        count: Int,
-        tasks: List<String>
-    ): Map<CalendarDay, List<String>> {
-        val taskMap = mutableMapOf<CalendarDay, List<String>>()
-        val calendar = Calendar.getInstance()
-        calendar.set(startDate.year, startDate.month - 1, startDate.day)
+        intervals: Map<String, Int>,
+        count: Int
+    ): Map<String, List<CalendarDay>> {
+        val taskMap = mutableMapOf<String, List<CalendarDay>>()
 
-        repeat(count) {
-            val newDate = CalendarDay.from(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DAY_OF_MONTH)
-            )
-            taskMap[newDate] = tasks
-            calendar.add(Calendar.DAY_OF_MONTH, intervalDays)
+        for ((taskName, intervalDays) in intervals) {
+            val calendar = Calendar.getInstance()
+            calendar.set(startDate.year, startDate.month - 1, startDate.day)
+
+            val dates = mutableListOf<CalendarDay>()
+            repeat(count) {
+                dates.add(
+                    CalendarDay.from(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH) + 1,
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                    )
+                )
+                calendar.add(Calendar.DAY_OF_MONTH, intervalDays)
+            }
+            taskMap[taskName] = dates
         }
 
         return taskMap
@@ -153,4 +161,3 @@ class HomeFragment : Fragment() {
         updateCalendarDecorators()
     }
 }
-

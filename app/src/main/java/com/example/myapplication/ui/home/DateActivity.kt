@@ -50,11 +50,9 @@ class DateActivity : AppCompatActivity() {
         val plantList = GardenStorage.plantedItems
 
         plantList.forEach { item ->
-            item.taskDates.forEach { (date, taskList) ->
-                if (date == selectedDate) {
-                    taskList.forEach { task ->
-                        tasks.add("$task (${item.title})")
-                    }
+            item.taskDates.forEach { (taskName, dates) ->
+                if (selectedDate in dates) {
+                    tasks.add("$taskName (${item.title})")
                 }
             }
         }
@@ -64,7 +62,7 @@ class DateActivity : AppCompatActivity() {
     override fun onBackPressed() {
         // Здесь можно обновить данные, если нужно
         setResult(RESULT_OK)
-        finish() // Закрываем активность
+        super.onBackPressed() // Вызов метода родителя
     }
 
 }
