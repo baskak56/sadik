@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.data.GardenStorage
 import com.example.myapplication.ui.dashboard.Item
+import com.example.myapplication.ui.home.StorageHelper
 
 class MyPlantAdapter(
     private var itemList: MutableList<Item>,
@@ -43,34 +44,21 @@ class MyPlantAdapter(
         }
 
         holder.deleteButton.setOnClickListener {
-            // Лог до удаления
             Log.d("DEBUG", "До удаления: itemList.size = ${itemList.size}, item = ${item.title}")
 
-            // Удаляем элемент из GardenStorage (если нужно)
             GardenStorage.plantedItems.remove(item)
+            StorageHelper.savePlants(holder.itemView.context, GardenStorage.plantedItems)
 
-            // Удаляем элемент из локального списка
             if (position >= 0 && position < itemList.size) {
-                // Удаляем элемент из списка
                 itemList.removeAt(position)
-
-                // Лог после удаления
                 Log.d("DEBUG", "После удаления: itemList.size = ${itemList.size}")
 
-                // Обновляем декораторы
                 onUpdateDecorators()
 
-                // Проверяем, если список пуст, перерисовываем весь RecyclerView
                 if (itemList.isEmpty()) {
-                    Log.d("DEBUG", "Список пуст, перерисовываем RecyclerView.")
-                    notifyDataSetChanged()  // Это перерисует весь RecyclerView
+                    notifyDataSetChanged()
                 } else {
-                    // Иначе удаляем конкретный элемент из RecyclerView
-                    Log.d("DEBUG", "Удаляем элемент на позиции $position.")
                     notifyItemRemoved(position)
-
-                    // После удаления обновляем UI, чтобы скрыть удалённый элемент
-                    // Используем notifyItemRangeChanged, чтобы обновить позиции элементов
                     if (position < itemList.size) {
                         notifyItemRangeChanged(position, itemList.size - position)
                     }
