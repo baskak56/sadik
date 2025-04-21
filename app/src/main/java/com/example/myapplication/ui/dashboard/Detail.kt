@@ -1,35 +1,33 @@
 package com.example.myapplication.ui.dashboard
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentDetailBinding
 
-class DetailFragment : Fragment() {
+class DetailActivity : AppCompatActivity() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentDetailBinding.inflate(inflater, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Используйте FragmentDetailBinding
+        val binding = FragmentDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val title = arguments?.getString("title") ?: "Без названия"
-        val calories = arguments?.getInt("calories") ?: 0
-        val imageResId = arguments?.getInt("imageResId") ?: R.drawable.ic_launcher_foreground
-        val detailedDescription = arguments?.getString("detailedDescription") ?: "Нет описания"
-        val detailedImageResId = arguments?.getInt("detailedImageResId") ?: R.drawable.ic_launcher_foreground
+        // Получаем данные из Intent
+        val title = intent.getStringExtra("title") ?: "Без названия"
+        val calories = intent.getIntExtra("calories", 0)
+        val imageResId = intent.getIntExtra("imageResId", R.drawable.ic_launcher_foreground)
+        val detailedDescription = intent.getStringExtra("detailedDescription") ?: "Нет описания"
+        val detailedImageResId = intent.getIntExtra("detailedImageResId", R.drawable.ic_launcher_foreground)
 
+        // Устанавливаем данные в UI
         binding.detailTitle.text = title
         binding.detailImage.setImageResource(detailedImageResId)
         binding.detailInstructions.text = detailedDescription
 
+        // Кнопка для возврата на предыдущий экран
         binding.btnBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            finish()  // Закрываем активити и возвращаемся
         }
-
-        return binding.root
     }
 }

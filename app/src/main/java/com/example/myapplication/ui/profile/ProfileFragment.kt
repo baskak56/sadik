@@ -3,10 +3,12 @@ package com.example.myapplication.ui.profile
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -14,14 +16,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentProfileBinding
-import  android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.GradientDrawable
+import android.view.ViewOutlineProvider
+import android.widget.GridLayout
+import androidx.core.widget.doAfterTextChanged
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.ViewOutlineProvider
 import android.view.inputmethod.EditorInfo
-import android.widget.GridLayout
-import android.widget.ImageView
-import androidx.core.widget.doAfterTextChanged
 
 class ProfileFragment : Fragment() {
 
@@ -29,6 +30,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: ProfileViewModel
     private lateinit var sharedPreferences: SharedPreferences
+    private var alertDialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,12 +39,7 @@ class ProfileFragment : Fragment() {
     ): View {
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        sharedPreferences =
-            requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        binding.avatarImageView.setOnClickListener {
-            showAvatarPicker()
-        }
-
+        sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
         setupViews()
         loadSavedData()
@@ -51,7 +48,6 @@ class ProfileFragment : Fragment() {
 
         return binding.root
     }
-
 
     private fun setupViews() {
         // Настройка кнопки меню
@@ -96,12 +92,10 @@ class ProfileFragment : Fragment() {
                         updateButton("Новичок", R.color.red)
                         viewModel.saveStatus("Новичок")
                     }
-
                     R.id.menu_item2 -> {
                         updateButton("Профи", R.color.blue)
                         viewModel.saveStatus("Профи")
                     }
-
                     R.id.menu_item3 -> {
                         updateButton("Гуру", R.color.green)
                         viewModel.saveStatus("Гуру")
@@ -124,12 +118,6 @@ class ProfileFragment : Fragment() {
             else -> R.drawable.rounded_button_red
         }
         binding.btnMenu.setBackgroundResource(backgroundRes)
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupTextWatchers() {
@@ -201,7 +189,7 @@ class ProfileFragment : Fragment() {
             R.drawable.image18,
             R.drawable.image19,
             R.drawable.image20,
-            R.drawable.image3,
+            R.drawable.image3
         )
 
         val dialogView = layoutInflater.inflate(R.layout.avatar_picker_dialog, null)
@@ -235,15 +223,25 @@ class ProfileFragment : Fragment() {
         alertDialog?.show()
     }
 
-    private var alertDialog: AlertDialog? = null
-
+    private fun loadSavedAvatar() {
+        val avatarRes = sharedPreferences.getInt("avatar_res", R.drawable.luk)
+        // Проверяем, существует ли ресурс
+        try {
+            val resource = resources.getDrawable(avatarRes, null)
+            binding.avatarImageView.setImageResource(avatarRes)
+        } catch (e: Resources.NotFoundException) {
+            // Если ресурс не найден, используем аватар по умолчанию
+            binding.avatarImageView.setImageResource(R.drawable.luk)
+        }
+    }
 
     override fun onPause() {
         super.onPause()
         saveUserData()
     }
-    private fun loadSavedAvatar() {
-        val avatarRes = sharedPreferences.getInt("avatar_res", R.drawable.luk)
-        binding.avatarImageView.setImageResource(avatarRes)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

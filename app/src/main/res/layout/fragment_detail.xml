@@ -15,7 +15,7 @@
             android:id="@+id/detailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Название"
+            android:text=""
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -35,10 +35,229 @@
             android:id="@+id/detailInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Инструкция..."
+            android:text=""
             android:textSize="16sp"
             android:lineSpacingExtra="6dp"
             android:padding="12dp"
+            android:textColor="#000000" />
+
+        <!-- Агротехника -->
+        <TextView
+            android:id="@+id/detailCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Тип овоща:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailPlantingPeriod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Период посева:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailPlantingMethod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Метод посадки:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailDepth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Глубина посадки (см):"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailSpacingBetween"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Расстояние между растениями (см):"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailRowSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Расстояние между рядами (см):"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <!-- Условия выращивания -->
+        <TextView
+            android:id="@+id/detailWatering"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Полив:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailLighting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Освещение:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailFertilizer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Удобрения:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Температура:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailMaturity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Срок созревания:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailHarvestTips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Рекомендации по сбору:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <!-- Совместимость и болезни -->
+        <TextView
+            android:id="@+id/detailCompatibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Совместимость:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailDiseases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Болезни и вредители:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <!-- Доп. агротехника -->
+        <TextView
+            android:id="@+id/detailSeedTreatment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Обработка семян:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailGerminationTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Время всходов:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailGrowthFeatures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Особенности роста:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailPruning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Обрезка и пасынкование:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailCommonMistakes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Частые ошибки:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <!-- Почва -->
+        <TextView
+            android:id="@+id/detailSoilType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Тип почвы:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailPH"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Кислотность почвы:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/detailCropRotation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Севооборот:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textColor="#000000" />
+
+        <!-- Региональные особенности -->
+        <TextView
+            android:id="@+id/detailRegionAdvice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Рекомендации по регионам:"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:textStyle="bold"
             android:textColor="#000000" />
 
         <!-- Кнопка -->
@@ -49,6 +268,7 @@
             android:text="Назад"
             android:background="@drawable/rounded_button_red"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_alignParentBottom="true"/>
     </LinearLayout>
 </ScrollView>

@@ -49,9 +49,11 @@ class DateActivity : AppCompatActivity() {
         val tasks = mutableListOf<String>()
         val plantList = GardenStorage.plantedItems
 
+        val selectedDateStr = "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}"
+
         plantList.forEach { item ->
             item.taskDates.forEach { (taskDate, taskInfoList) ->
-                if (selectedDate == taskDate) {
+                if (selectedDateStr == taskDate) {
                     taskInfoList.forEach { taskInfo ->
                         tasks.add("${taskInfo.name} (${item.title})")
                     }

@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        GardenStorage.plantedItems = StorageHelper.loadPlants(requireContext()).toMutableList()
         adapter = MyPlantAdapter(
             GardenStorage.plantedItems.toMutableList(),
             onItemClick = { item ->
@@ -88,6 +88,7 @@ class HomeFragment : Fragment() {
                 }
                 Log.d("TASK_CHECK", "${selectedPlant.title}: ${selectedPlant.taskDates}")
                 GardenStorage.plantedItems.add(selectedPlant)
+                StorageHelper.savePlants(requireContext(), GardenStorage.plantedItems)
                 adapter.updateItems(GardenStorage.plantedItems.toMutableList())
                 updateCalendarDecorators()
 
@@ -118,12 +119,19 @@ class HomeFragment : Fragment() {
         decorators.clear()
 
         GardenStorage.plantedItems.forEach { item ->
-            val allEntries = item.taskDates.entries
-            for ((date, taskList) in allEntries) {
-                for (task in taskList) {
-                    val decorator = TaskDecorator(HashSet(setOf(date)), task.color)
-                    binding.calendarView.addDecorator(decorator)
-                    decorators.add(decorator)
+            for ((dateStr, taskList) in item.taskDates) {
+                val parts = dateStr.split("-")
+                if (parts.size == 3) {
+                    val calendarDay = CalendarDay.from(
+                        parts[0].toInt(),
+                        parts[1].toInt(),
+                        parts[2].toInt()
+                    )
+                    for (task in taskList) {
+                        val decorator = TaskDecorator(HashSet(setOf(calendarDay)), task.color)
+                        binding.calendarView.addDecorator(decorator)
+                        decorators.add(decorator)
+                    }
                 }
             }
         }
@@ -134,8 +142,8 @@ class HomeFragment : Fragment() {
         intervals: Map<String, Int>,
         count: Int,
         taskColors: Map<String, Int>
-    ): Map<CalendarDay, List<TaskInfo>> {
-        val taskMap = mutableMapOf<CalendarDay, MutableList<TaskInfo>>()
+    ): Map<String, List<TaskInfo>> {
+        val taskMap = mutableMapOf<String, MutableList<TaskInfo>>()
 
         for ((taskName, intervalDays) in intervals) {
             val calendar = Calendar.getInstance()
@@ -148,8 +156,8 @@ class HomeFragment : Fragment() {
                     calendar.get(Calendar.DAY_OF_MONTH)
                 )
                 val info = TaskInfo(taskName, taskColors[taskName] ?: Color.RED)
-                taskMap.getOrPut(date) { mutableListOf() }.add(info)
-
+                val key = "${date.year}-${date.month}-${date.day}"
+                taskMap.getOrPut(key) { mutableListOf() }.add(info)
                 calendar.add(Calendar.DAY_OF_MONTH, intervalDays)
             }
         }
