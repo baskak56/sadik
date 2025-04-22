@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.data.GardenStorage
 import com.example.myapplication.ui.dashboard.Item
+import com.example.myapplication.ui.home.StorageHelper
 
 class MyPlantAdapter(
     private var itemList: MutableList<Item>,
@@ -48,6 +49,7 @@ class MyPlantAdapter(
 
             // Удаляем элемент из GardenStorage (если нужно)
             GardenStorage.plantedItems.remove(item)
+            StorageHelper.savePlants(holder.itemView.context, GardenStorage.plantedItems)
 
             // Удаляем элемент из локального списка
             if (position >= 0 && position < itemList.size) {
