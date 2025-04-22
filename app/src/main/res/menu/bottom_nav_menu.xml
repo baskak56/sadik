@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:icon="@drawable/homelogo"
+        android:title="Дом" />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/starlogo"
+        android:title="Овощи" />
 
     <item
         android:id="@+id/navigation_notifications"
@@ -19,6 +19,6 @@
     <!-- Добавляем пункт для Profile -->
     <item
     android:id="@+id/navigation_profile"
-    android:icon="@drawable/baseline_bungalow_24"
-    android:title="Profile" />
+    android:icon="@drawable/profilelogo"
+    android:title="Профиль" />
 </menu>
