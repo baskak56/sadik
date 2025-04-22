@@ -44,7 +44,7 @@ class ItemAdapter(
 
         holder.btnFavorite.setImageResource(
             if (item.favorite) R.drawable.ic_home_black_24dp
-            else R.drawable.baseline_bungalow_24
+            else R.drawable.starcardlogo
         )
 
         holder.itemView.setOnClickListener {

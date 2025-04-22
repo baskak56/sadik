@@ -21,15 +21,15 @@
 
             <ImageButton
                 android:id="@+id/btnFavorite"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
                 android:layout_gravity="end|top"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Избранное"
                 android:padding="8dp"
-                android:src="@drawable/baseline_bungalow_24"
-                app:tint="#FDADAD" />
+                android:src="@drawable/starcardlogo"
+                app:tint="#FFC107" />
 
             <ImageView
                 android:id="@+id/imageView"
