@@ -20,9 +20,10 @@ class DetailActivity : AppCompatActivity() {
         val category = intent.getStringExtra("category") ?: ""
         val plantingPeriod = intent.getStringExtra("plantingPeriod") ?: "а"
         val plantingMethod = intent.getStringExtra("plantingMethod") ?: ""
-        val depth = intent.getStringExtra("depth") ?: ""
-        val spacingBetween = intent.getStringExtra("spacingBetween") ?: ""
-        val rowSpacing = intent.getStringExtra("rowSpacing") ?: ""
+        val depth = intent.getIntExtra("depth", 0).takeIf { it != 0 }?.toString() ?: "Не указано"
+        val spacingBetween = intent.getIntExtra("spacingBetween", 0).takeIf { it != 0 }?.toString() ?: "Не указано"
+        val rowSpacing = intent.getIntExtra("rowSpacing", 0).takeIf { it != 0 }?.toString() ?: "Не указано"
+
 
         val watering = intent.getStringExtra("watering") ?: ""
         val lighting = intent.getStringExtra("lighting") ?: ""

@@ -15,7 +15,7 @@ data class Item(
     var favorite: Boolean = false,
     val detailedDescription: String = "Описание не доступно",
     val detailedImageResId: Int = R.drawable.luk,
-    val taskDates: Map<String, List<TaskInfo>> = emptyMap(),
+    var taskDates: Map<String, List<TaskInfo>> = emptyMap(),
     var decorator: TaskDecorator? = null,
     val category: String = "",
     val plantingPeriod: String = "",
