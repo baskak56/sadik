@@ -15,7 +15,6 @@ class NotificationsFragment : Fragment() {
     private var _binding: FragmentNotificationsBinding? = null
 
     private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,7 +31,8 @@ class NotificationsFragment : Fragment() {
             Task("4. Разметка грядок", false),
             Task("5. Внесение удобрений", false),
             Task("6. Рыхление и выравнивание поверхности", false),
-            Task("7. Полив и прогрев почвы", false),
+            Task("7. Обработка от вредителей (по необходимости)", false),
+            Task("8. Полив и прогрев почвы", false),
 
         )
 
