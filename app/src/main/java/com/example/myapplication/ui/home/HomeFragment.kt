@@ -65,25 +65,25 @@ class HomeFragment : Fragment() {
                         val intervals = mapOf("Полив" to 1, "Прополка" to 3, "Секс" to 5)
                         val colors = mapOf("Полив" to Color.BLUE, "Прополка" to Color.GREEN, "Секс" to Color.MAGENTA)
                         val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
-                        selectedPlant = Item(R.drawable.luk, "Морковь", 41, taskDates = dates)
+                        selectedPlant = Item(R.drawable.defaultmorkov, "Морковь", 41, taskDates = dates)
                     }
                     "Помидор" -> {
                         val intervals = mapOf("Удобрение" to 5, "Полив" to 2)
                         val colors = mapOf("Удобрение" to Color.YELLOW, "Полив" to Color.CYAN)
                         val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
-                        selectedPlant = Item(R.drawable.detailpomidor, "Помидор", 42, taskDates = dates)
+                        selectedPlant = Item(R.drawable.defaultpomidor, "Помидор", 42, taskDates = dates)
                     }
                     "Картофель" -> {
                         val intervals = mapOf("Подгребание" to 5, "Полив" to 4)
                         val colors = mapOf("Подгребание" to Color.LTGRAY, "Полив" to Color.BLUE)
                         val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
-                        selectedPlant = Item(R.drawable.luk, "Картофель", 70, taskDates = dates)
+                        selectedPlant = Item(R.drawable.defaultkartofel, "Картофель", 70, taskDates = dates)
                     }
                     else -> {
                         val intervals = mapOf("Полив" to 1)
                         val colors = mapOf("Полив" to Color.GREEN)
                         val dates = generateTaskMap(CalendarDay.today(), intervals, 10, colors)
-                        selectedPlant = Item(R.drawable.luk, "Огурец", 43, taskDates = dates)
+                        selectedPlant = Item(R.drawable.defaultogurec, "Огурец", 43, taskDates = dates)
                     }
                 }
                 Log.d("TASK_CHECK", "${selectedPlant.title}: ${selectedPlant.taskDates}")

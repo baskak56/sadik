@@ -6,6 +6,7 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.data.GardenStorage
 import com.example.myapplication.ui.home.StorageHelper
@@ -30,7 +31,8 @@ class DateActivity : AppCompatActivity() {
         if (plantTasks.isEmpty()) {
             val emptyText = TextView(this).apply {
                 text = "На этот день нет задач."
-                textSize = 16f
+                textSize = 20f
+                gravity = Gravity.CENTER
             }
             taskContainer.addView(emptyText)
         } else {
@@ -58,7 +60,8 @@ class DateActivity : AppCompatActivity() {
                             if (taskContainer.childCount == 0) {
                                 val allTasksCompletedText = TextView(this@DateActivity).apply {
                                     text = "Задачи выполнены!"
-                                    textSize = 18f
+                                    textSize = 20f
+                                    gravity = Gravity.CENTER
                                     setTextColor(resources.getColor(R.color.green))
                                 }
                                 taskContainer.addView(allTasksCompletedText)

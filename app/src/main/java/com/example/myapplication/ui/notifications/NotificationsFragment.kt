@@ -14,8 +14,6 @@ class NotificationsFragment : Fragment() {
 
     private var _binding: FragmentNotificationsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -28,9 +26,14 @@ class NotificationsFragment : Fragment() {
 
         val recyclerView = binding.taskRecyclerView
         val tasks = mutableListOf(
-            Task("Отъебать санин рот ", false),
-            Task("Темчику кинуть пару палок", false),
-            Task("Прополоть грядки", false)
+            Task("1. Очистка участка от сорняков и мусора", false),
+            Task("2. Перекопка почвы", false),
+            Task("3. Определение типа почвы и её улучшение", false),
+            Task("4. Разметка грядок", false),
+            Task("5. Внесение удобрений", false),
+            Task("6. Рыхление и выравнивание поверхности", false),
+            Task("7. Полив и прогрев почвы", false),
+
         )
 
         val adapter = TaskAdapter(tasks)
