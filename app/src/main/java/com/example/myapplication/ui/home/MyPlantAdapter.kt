@@ -54,6 +54,8 @@ class MyPlantAdapter(
                 Log.d("DEBUG", "После удаления: itemList.size = ${itemList.size}")
 
                 onUpdateDecorators()
+                (holder.itemView.rootView.findViewById<com.example.myapplication.ui.home.GardenBedView>(R.id.gardenBedView))
+                    ?.setPlants(itemList)
 
                 if (itemList.isEmpty()) {
                     notifyDataSetChanged()

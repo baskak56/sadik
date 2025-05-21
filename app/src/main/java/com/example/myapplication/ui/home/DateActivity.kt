@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.view.Gravity
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.data.GardenStorage
 import com.example.myapplication.ui.home.StorageHelper
@@ -21,6 +22,7 @@ class DateActivity : AppCompatActivity() {
 
         val selectedDateStr = intent.getStringExtra("selectedDate") ?: ""
         val selectedDate = parseCalendarDay(selectedDateStr)
+        val buttonBack: Button = findViewById(R.id.buttonBack)
 
         val textView: TextView = findViewById(R.id.textViewDate)
         textView.text = "Дата: ${formatCalendarDay(selectedDateStr)}\n"
@@ -71,6 +73,10 @@ class DateActivity : AppCompatActivity() {
                 }
                 taskContainer.addView(checkBox)
             }
+        }
+        buttonBack.setOnClickListener {
+            setResult(RESULT_OK)
+            finish()
         }
     }
 
@@ -131,4 +137,5 @@ class DateActivity : AppCompatActivity() {
         setResult(RESULT_OK)
         super.onBackPressed()
     }
+
 }
