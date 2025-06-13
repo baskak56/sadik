@@ -23,20 +23,44 @@
 
         <!-- Кнопка добавления растения -->
 
-        <Button
-            android:id="@+id/btnRainToday"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/calendarView"
-            android:layout_marginTop="16dp"
-            android:text="Прошел дождь" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btnRainToday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Прошел дождь" />
+
+            <Button
+                android:id="@+id/btnStrongWind"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Сильный ветер"/>
+
+            <Button
+                android:id="@+id/btnHail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Град"/>
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddPlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/baseline_bungalow_24"
+            android:src="@drawable/baseline_add_task_24"
             android:contentDescription="Добавить растение"
             android:backgroundTint="@color/purple_700" />
 

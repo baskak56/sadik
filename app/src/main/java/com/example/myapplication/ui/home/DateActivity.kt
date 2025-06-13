@@ -78,6 +78,7 @@ class DateActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
         }
+
     }
 
     private fun formatCalendarDay(calendarDay: String): String {
@@ -87,6 +88,7 @@ class DateActivity : AppCompatActivity() {
         val formattedMonth = month.padStart(2, '0')
         return "$formattedDay.$formattedMonth.$year"
     }
+
 
     private fun parseCalendarDay(calendarDay: String): CalendarDay? {
         val regex = """CalendarDay\{(\d{4})-(\d{1,2})-(\d{1,2})\}""".toRegex()
@@ -135,7 +137,7 @@ class DateActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         setResult(RESULT_OK)
-        super.onBackPressed()
+        finish()
     }
 
 }

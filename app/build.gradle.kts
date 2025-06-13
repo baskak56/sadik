@@ -14,6 +14,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        setProperty("archivesBaseName", "Садоводы-v${versionName}")
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,7 +52,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.espresso:espresso-core:3.4.0")
     implementation("com.prolificinteractive:material-calendarview:1.4.3")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")

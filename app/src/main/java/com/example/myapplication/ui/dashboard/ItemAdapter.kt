@@ -43,7 +43,7 @@ class ItemAdapter(
         holder.textViewCalories.text = "${item.calories} ккал"
 
         holder.btnFavorite.setImageResource(
-            if (item.favorite) R.drawable.ic_home_black_24dp
+            if (item.favorite) R.drawable.topil
             else R.drawable.starcardlogo
         )
 

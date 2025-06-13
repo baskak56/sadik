@@ -40,6 +40,5 @@ data class Item(
     val soilType: String = "",
     val pH: String = "",
     val cropRotation: String = "",
-    val regionAdvice: String = "",
-    val harvestDate: CalendarDay? = null
+    val regionAdvice: String = ""
 )
